@@ -1,2 +1,6 @@
-# grpc-samples-dotnet
-Random collection of gRPC samples in .NET/C#
+gRPC .NET Examples
+==================
+
+This is a collection of .NET/C# gRPC examples.
+
+This is not official Google product.
