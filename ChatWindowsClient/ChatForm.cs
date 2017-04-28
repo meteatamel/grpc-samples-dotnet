@@ -67,8 +67,7 @@ namespace ChatWindowsClient
                     {
                         var serverMessage = call.ResponseStream.Current;
                         var otherClientMessage = serverMessage.Message;
-                        // TODO: Display the message
-                        var displayMessage = string.Format("%s:%s\n", otherClientMessage.From, otherClientMessage.Message);
+                        var displayMessage = string.Format("{0}:{1}{2}", otherClientMessage.From, otherClientMessage.Message, Environment.NewLine);
                         chatTextBox.Text += displayMessage;
                     }
                 }
