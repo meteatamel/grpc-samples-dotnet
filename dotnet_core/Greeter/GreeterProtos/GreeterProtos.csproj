@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
-    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,9 +25,8 @@
     <Message Text="Generating protos @(Proto)" Importance="High" />
     <!-- TODO: Run different command lines per OS. -->
     <Exec Command="$(ProjectDir)/../../tools/gen_protos.sh" />
-
     <!-- Ensure all of the generated files are compiled. -->
-    <ItemGroup>
+    <ItemGroup Condition="'@(Compile)' == ''">
       <Compile Include="generated\*.cs" />
     </ItemGroup>
   </Target>
