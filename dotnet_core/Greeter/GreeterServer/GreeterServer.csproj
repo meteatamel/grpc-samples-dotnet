@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>1.0.3</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GreeterProtos\GreeterProtos.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.0.0" />
+    <PackageReference Include="Grpc" Version="1.0.1" />
+    <PackageReference Include="Grpc.Core" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Dockerfile" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <Target Name="GcrDeploy" DependsOnTargets="Publish">
+    <PropertyGroup>
+      <GcrTag>gcr.io/$PROJECT_ID/$(MSBuildProjectName.ToLower()):$(Version)</GcrTag>
+    </PropertyGroup>
+    <Message Text="Publishing to GCR as $(GcrTag)" Importance="High" />
+    <Exec Command="gcloud container builds submit '--tag=$(GcrTag)' $(ProjectDir)$(PublishDir)" />
+  </Target>
+
+</Project>

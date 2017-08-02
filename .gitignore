@@ -1,4 +1,8 @@
+.DS_Store
 .vs/
+.vscode/
 packages/
 bin
 obj
+generated
+
