@@ -38,8 +38,9 @@ namespace ChatWindowsClient
     {
         private const string Host = "localhost";
         private const int Port = 8080;
-  
+
         private ChatService.ChatServiceClient _chatService;
+        private AsyncDuplexStreamingCall<ChatMessage, ChatMessageFromServer> _call;
 
         public ChatForm()
         {
@@ -58,47 +59,42 @@ namespace ChatWindowsClient
 
         private async void ChatForm_Load(object sender, EventArgs e)
         {
+            // Open a connection to the server
             try
             {
-                // Open a connection to the server
-                using (var call = _chatService.chat())
+                using (_call = _chatService.chat())
                 {
-                    while (await call.ResponseStream.MoveNext(CancellationToken.None))
+                    // Read messages from the response stream
+                    while (await _call.ResponseStream.MoveNext(CancellationToken.None))
                     {
-                        var serverMessage = call.ResponseStream.Current;
+                        var serverMessage = _call.ResponseStream.Current;
                         var otherClientMessage = serverMessage.Message;
                         var displayMessage = string.Format("{0}:{1}{2}", otherClientMessage.From, otherClientMessage.Message, Environment.NewLine);
                         chatTextBox.Text += displayMessage;
                     }
+                    // Format and display the message
                 }
             }
             catch (RpcException)
             {
+                _call = null;
                 throw;
             }
         }
 
         private async void sendButton_Click(object sender, EventArgs e)
         {
-            // Create a message
+            // Create a chat message
             var message = new ChatMessage
             {
                 From = nameTextBox.Text,
                 Message = messageTextBox.Text
             };
+            // Send the message
 
-            try
+            if (_call != null)
             {
-                // Send the message
-                using (var call = _chatService.chat())
-                {
-                    await call.RequestStream.WriteAsync(message);
-                    await call.RequestStream.CompleteAsync();
-                }
-            }
-            catch (RpcException)
-            {
-                throw;
+                await _call.RequestStream.WriteAsync(message);
             }
         }
     }
