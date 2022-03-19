@@ -56,4 +56,6 @@ message HelloResponse {
 
 service GreetingService {
     rpc greeting(HelloRequest) returns (HelloResponse);
+
+    rpc goodbye(HelloRequest) returns (HelloResponse);
 }

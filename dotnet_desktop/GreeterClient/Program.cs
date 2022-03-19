@@ -53,11 +53,20 @@ namespace GreeterClient
                 Sentiment = Sentiment.Happy
             };
 
+            var request2 = new HelloRequest
+            {
+                Name = "Wenze is writing grpc - on C#",
+                Age = 18,
+                Sentiment = Sentiment.Happy
+            };
+
             // Send the request
             Console.WriteLine("GreeterClient sending request");
             var response = client.greeting(request);
-
             Console.WriteLine("GreeterClient received response: " + response.Greeting);
+
+            var responseForGoodBye = client.goodbye(request2);
+            Console.WriteLine("CreeterClient received response:" + responseForGoodBye.Greeting);
 
             // Shutdown
             channel.ShutdownAsync().Wait();

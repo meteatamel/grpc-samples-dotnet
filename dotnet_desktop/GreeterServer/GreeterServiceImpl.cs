@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using Com.Example.Grpc;
 using Grpc.Core;
+using System;
 using System.Threading.Tasks;
 
 namespace GreeterServer
@@ -36,7 +37,15 @@ namespace GreeterServer
     {
         public override Task<HelloResponse> greeting(HelloRequest request, ServerCallContext context)
         {
+            Console.WriteLine($"Recieved a request of { request.Name}");
             return Task.FromResult(new HelloResponse { Greeting = "Hello " + request.Name });
+        }
+
+        public override Task<HelloResponse> goodbye(HelloRequest request, ServerCallContext context)
+        {
+            Console.WriteLine($"Recieved a request of { request.Name}");
+
+            return Task.FromResult(new HelloResponse { Greeting = "Goodbye " + request.Name });
         }
     }
 }

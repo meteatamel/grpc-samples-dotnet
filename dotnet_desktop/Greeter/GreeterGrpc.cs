@@ -52,6 +52,13 @@ namespace Com.Example.Grpc {
         __Marshaller_HelloRequest,
         __Marshaller_HelloResponse);
 
+    static readonly Method<global::Com.Example.Grpc.HelloRequest, global::Com.Example.Grpc.HelloResponse> __Method_goodbye = new Method<global::Com.Example.Grpc.HelloRequest, global::Com.Example.Grpc.HelloResponse>(
+        MethodType.Unary,
+        __ServiceName,
+        "goodbye",
+        __Marshaller_HelloRequest,
+        __Marshaller_HelloResponse);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
@@ -62,6 +69,11 @@ namespace Com.Example.Grpc {
     public abstract class GreetingServiceBase
     {
       public virtual global::System.Threading.Tasks.Task<global::Com.Example.Grpc.HelloResponse> greeting(global::Com.Example.Grpc.HelloRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::Com.Example.Grpc.HelloResponse> goodbye(global::Com.Example.Grpc.HelloRequest request, ServerCallContext context)
       {
         throw new RpcException(new Status(StatusCode.Unimplemented, ""));
       }
@@ -107,6 +119,22 @@ namespace Com.Example.Grpc {
       {
         return CallInvoker.AsyncUnaryCall(__Method_greeting, null, options, request);
       }
+      public virtual global::Com.Example.Grpc.HelloResponse goodbye(global::Com.Example.Grpc.HelloRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return goodbye(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::Com.Example.Grpc.HelloResponse goodbye(global::Com.Example.Grpc.HelloRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_goodbye, null, options, request);
+      }
+      public virtual AsyncUnaryCall<global::Com.Example.Grpc.HelloResponse> goodbyeAsync(global::Com.Example.Grpc.HelloRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return goodbyeAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual AsyncUnaryCall<global::Com.Example.Grpc.HelloResponse> goodbyeAsync(global::Com.Example.Grpc.HelloRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_goodbye, null, options, request);
+      }
       protected override GreetingServiceClient NewInstance(ClientBaseConfiguration configuration)
       {
         return new GreetingServiceClient(configuration);
@@ -117,7 +145,8 @@ namespace Com.Example.Grpc {
     public static ServerServiceDefinition BindService(GreetingServiceBase serviceImpl)
     {
       return ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_greeting, serviceImpl.greeting).Build();
+          .AddMethod(__Method_greeting, serviceImpl.greeting)
+          .AddMethod(__Method_goodbye, serviceImpl.goodbye).Build();
     }
 
   }
